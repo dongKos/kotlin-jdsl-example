@@ -1,4 +1,4 @@
-package com.example.kotlinjdslexample.h2db
+package com.example.kotlinjdslexample.mysql
 
 import io.vertx.core.Vertx
 import io.vertx.jdbcclient.JDBCConnectOptions
@@ -12,7 +12,7 @@ import org.hibernate.reactive.pool.impl.DefaultSqlClientPoolConfiguration
 import org.hibernate.reactive.provider.Settings
 import java.net.URI
 
-class H2ConnectionPool : DefaultSqlClientPool() {
+class MYSQLConnectionPool : DefaultSqlClientPool() {
     override fun createPool(
         uri: URI,
         connectOptions: SqlConnectOptions,
@@ -31,34 +31,16 @@ class H2ConnectionPool : DefaultSqlClientPool() {
     }
 }
 
-class VertxH2DBConnectionPoolConfiguration : DefaultSqlClientPoolConfiguration() {
+class VertxMysqlDBConnectionPoolConfiguration : DefaultSqlClientPoolConfiguration() {
     private lateinit var user: String
     private var pass: String? = null
     private var cacheMaxSize: Int? = null
     private var sqlLimit: Int? = null
     override fun connectOptions(uri: URI): SqlConnectOptions {
-        if (uri.scheme == "h2") {
-            return SqlConnectOptions()
-                .setHost("jdbc:$uri")
-                .setUser(user)
-                .apply {
-                    pass?.let { password = it }
-                    //enable the prepared statement cache by default
-                    cachePreparedStatements = true
-
-                    cacheMaxSize?.run {
-                        if (this <= 0) {
-                            cachePreparedStatements = false
-                        } else {
-                            preparedStatementCacheMaxSize = this
-                        }
-                    }
-
-                    sqlLimit?.run { setPreparedStatementCacheSqlLimit(this) }
-                }
-        }
-
-        return super.connectOptions(uri)
+        return SqlConnectOptions()
+            .setHost("jdbc:$uri")
+            .setUser(user)
+            .setPassword(pass)
     }
 
     override fun configure(configuration: MutableMap<Any?, Any?>) {

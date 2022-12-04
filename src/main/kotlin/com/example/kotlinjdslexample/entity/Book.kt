@@ -7,7 +7,7 @@ import javax.persistence.*
 data class Book(
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,
 
     @Column

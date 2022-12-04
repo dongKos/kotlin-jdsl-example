@@ -1,7 +1,7 @@
 package com.example.kotlinjdslexample
 
-import com.example.kotlinjdslexample.h2db.H2ConnectionPool
-import com.example.kotlinjdslexample.h2db.VertxH2DBConnectionPoolConfiguration
+import com.example.kotlinjdslexample.mysql.MYSQLConnectionPool
+import com.example.kotlinjdslexample.mysql.VertxMysqlDBConnectionPoolConfiguration
 import com.linecorp.kotlinjdsl.query.creator.SubqueryCreator
 import com.linecorp.kotlinjdsl.spring.data.reactive.query.SpringDataHibernateMutinyReactiveQueryFactory
 import com.zaxxer.hikari.HikariDataSource
@@ -32,8 +32,8 @@ class ReactiveQueryConfiguration {
 
         private val internalProps = Properties(persistenceUnitInfo.properties).apply {
             putAll(jpaPropertyMap)
-            setProperty(Settings.SQL_CLIENT_POOL, H2ConnectionPool::class.qualifiedName)
-            setProperty(Settings.SQL_CLIENT_POOL_CONFIG, VertxH2DBConnectionPoolConfiguration::class.qualifiedName)
+            setProperty(Settings.SQL_CLIENT_POOL, MYSQLConnectionPool::class.qualifiedName)
+            setProperty(Settings.SQL_CLIENT_POOL_CONFIG, VertxMysqlDBConnectionPoolConfiguration::class.qualifiedName)
             setProperty(Settings.URL, persistenceUnitInfo.nonJtaDataSource.unwrap(HikariDataSource::class.java).jdbcUrl)
             setProperty(Settings.USER, persistenceUnitInfo.nonJtaDataSource.unwrap(HikariDataSource::class.java).username)
             setProperty(Settings.PASS, persistenceUnitInfo.nonJtaDataSource.unwrap(HikariDataSource::class.java).password)
